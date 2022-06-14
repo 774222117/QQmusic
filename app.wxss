@@ -1,2 +1,5 @@
 /**app.wxss**/
-
+page {
+  background-color: #fff;
+  box-sizing: border-box;
+}

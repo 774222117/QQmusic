@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/774222117/QQmusic#readme",
   "dependencies": {
-    "@vant/weapp": "^1.10.3"
+    "@vant/weapp": "^1.10.3",
+    "hy-event-store": "^1.2.1"
   }
 }

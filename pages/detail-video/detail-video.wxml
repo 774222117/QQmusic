@@ -1,5 +1,5 @@
 <!--pages/detail-video/detail-video.wxml-->
-<video class="video" src="{{mvURLInfo.url}}" autoplay loop danmu-list="{{danmuList}}"></video>
+<video class="video" src="{{mvURLInfo.url}}" autoplay loop danmu-list="{{danmuList}}" referrer-policy="origin"></video>
 
 <block wx:for="{{100}}" wx:key="this">
   <view>列表数据{{item}}</view>
