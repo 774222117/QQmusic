@@ -4,7 +4,8 @@
     "pages/home-video/home-video",
     "pages/detail-video/detail-video",
     "pages/detail-search/detail-search",
-    "components/area-header/area-header"
+    "components/area-header/area-header",
+    "pages/detail-songs/detail-songs"
   ],
   "window": {
     "backgroundTextStyle": "light",
