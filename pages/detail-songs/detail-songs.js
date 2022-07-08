@@ -8,8 +8,9 @@ Page({
    * 页面的初始数据
    */
   data: {
+    type:'',
     ranking:'',
-    rankingInfo:''
+    songInfo:{}
   },
 
   /**
@@ -18,11 +19,15 @@ Page({
   onLoad(options) {
     // console.log(options)
     const type = options.type
+    this.setData({type})
     if(type === 'menu'){
       const id = options.id
       // console.log(id)
       getRankings(id).then(res => {
-        console.log(res)
+        // console.log(res.data.playlist)
+        this.setData({
+          songInfo:res.data.playlist
+        })
       })
     }else if(type === 'rank'){
       const ranking = options.ranking
@@ -41,7 +46,7 @@ Page({
   getRankingDataHandler:function(res){
     // console.log(res)
     this.setData({
-      rankingInfo:res
+      songInfo:res
     })
   },
   /**

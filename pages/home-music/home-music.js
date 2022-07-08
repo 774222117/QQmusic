@@ -95,7 +95,7 @@ Page({
   // 跳转通用函数，参数表达要去的地方
   navigateToDetailSongsPage(rankingName){
     wx.navigateTo({
-      url: `/pages/detail-songs/detail-songs?ranking=${rankingName}`,
+      url: `/pages/detail-songs/detail-songs?ranking=${rankingName}&type=rank`,
     })
   },
   onUnload: function () {
