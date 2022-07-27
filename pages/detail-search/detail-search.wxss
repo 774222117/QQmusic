@@ -1,7 +1,7 @@
 /* pages/detail-search/index.wxss */
 page {
   padding: 0 20rpx;
-  /* padding-top: 56px; */
+  padding-top: 56px;
 }
 
 /* 搜索框 */

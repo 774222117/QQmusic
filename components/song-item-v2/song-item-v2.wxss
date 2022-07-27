@@ -41,3 +41,11 @@
 .source .dots {
   margin: 0 6rpx;
 }
+
+text {
+  /* min-width: 100rpx; */
+  /* border: 1px red solid; */
+  /* text-overflow: ellipsis; */
+  width: 74rpx;
+  white-space: nowrap;
+}

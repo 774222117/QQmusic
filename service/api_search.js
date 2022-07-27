@@ -12,3 +12,9 @@ export function getSearchSuggest(keywords){
     type:'mobile'
   })
 }
+
+export function getSearchResult(keywords){
+  return hyRequest.get('/search',{
+    keywords
+  })
+}
