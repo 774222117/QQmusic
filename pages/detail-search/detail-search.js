@@ -11,7 +11,8 @@ Page({
     hotKeywords:[],
     suggestSongs:[],
     suggestSongsNodes:[],
-    searchValue:''
+    searchValue:'',
+    aaa:''
   },
 
   onLoad(options) {
