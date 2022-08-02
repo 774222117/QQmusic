@@ -24,6 +24,9 @@ Page({
     playModeIndex:0,//播放模式
     playModeName:'order',
 
+    isPlaying:false,//暂停播放
+    playingName:'pause',
+
     currentPage:0,
     contentHeight:0,
     isMusicLyric:true,
@@ -36,7 +39,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    
     // 1.获取传入的id
     const id = options.id
     // console.log(id)
@@ -86,15 +88,14 @@ Page({
   //   })
 
   //   // 2.监听时间改变
-  //   audioContext.onTimeUpdate(()=>{
-  //     // console.log(audioContext.currentTime)
-  //     // 1.获取当前时间
-  //     const currentTime = audioContext.currentTime * 1000
-  //     //2. 根据当前时间修改currentTime/sliderValue
-  //     if(!this.data.isSliderChanging){
-  //       const sliderValue = currentTime / this.data.durationTime * 100
-  //       this.setData({ sliderValue,currentTime })
-  //     }
+    // audioContext.onTimeUpdate(()=>{
+    //   // 1.获取当前时间
+    //   const currentTime = audioContext.currentTime * 1000
+    //   //2. 根据当前时间修改currentTime/sliderValue
+    //   if(!this.data.isSliderChanging){
+    //     const sliderValue = currentTime / this.data.durationTime * 100
+    //     this.setData({ sliderValue,currentTime })
+    //   }
 
   //     // 3.根据当前时间去查找播放的歌词
   //     if(!this.data.lyricInfos.length) return
@@ -154,6 +155,10 @@ Page({
     // 设置playerStore中的playModeIndex
     playerStore.setState('playModeIndex',playModeIndex)
   },
+  // 播放暂停
+  handlePlayBtnClick:function(){
+    playerStore.dispatch('changeMusicPlayStatusAction',!this.data.isPlaying)
+  },
   // 从playerStore中获取数据
   // ====================  数据监听  ====================
   setupPlayerStoreListener(){
@@ -188,9 +193,31 @@ Page({
     })
 
     // 3.监听播放模式相关的数据
-    playerStore.onState('playModeIndex',(playModeIndex) => {
-      this.setData({ playModeIndex,playModeName:playModeNames[playModeIndex]})
+    playerStore.onStates(['playModeIndex','isPlaying'],({
+      playModeIndex,
+      isPlaying
+    }) => {
+      if(playModeIndex !== undefined){
+        this.setData({ 
+          playModeIndex,
+          playModeName:playModeNames[playModeIndex]
+        })
+      }
+      if(isPlaying !== undefined){
+        this.setData({
+          isPlaying,
+          playingName: isPlaying ? 'pause' : 'resume'
+        })
+      }
     })
+  },
+  // 上一首
+  handlePrevBtnClick:function(){
+    playerStore.dispatch('changeNewMusicAction',false)
+  },
+  // 下一首
+  handleNextBtnClick:function(){
+    playerStore.dispatch('changeNewMusicAction')
   },
   onUnload() {
 

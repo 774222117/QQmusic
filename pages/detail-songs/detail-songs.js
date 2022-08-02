@@ -1,5 +1,6 @@
 import { rankingStore } from "../../store/ranking-store"
 import { getRankings } from "../../service/api_music"
+import { playerStore } from '../../store/index'
 
 // pages/detail-songs/detail-songs.js
 Page({
@@ -16,6 +17,12 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
+  handleSongItemClick:function(event){
+    // console.log(event)
+    const index = event.currentTarget.dataset.index
+    playerStore.setState('playListSongs',this.data.songInfo.tracks)
+    playerStore.setState('playListIndex',index)
+  },
   onLoad(options) {
     // console.log(options)
     const type = options.type

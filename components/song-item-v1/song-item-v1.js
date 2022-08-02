@@ -26,11 +26,11 @@ Component({
     handleSongItemClick(){
       // console.log(this.properties.item)
       const id = this.properties.item.id
-      // 页面跳转
+      // 1.页面跳转
       wx.navigateTo({
         url: '/pages/music-player/music-player?id=' + id,
       })
-      // 对歌曲的数据请求和其他操作
+      // 2.对歌曲的数据请求和其他操作
       playerStore.dispatch('playMusicWithSongIdAction',{ id })
     }
   }

@@ -4,8 +4,9 @@ import { rankingStore,rankingMap } from "../../store/ranking-store"
 import { getBanners,getSongMenu } from "../../service/api_music"
 import queryRect from "../../utils/query-rect"
 import throttle from "../../utils/throttle"
+import { playerStore } from "../../store/player-store"
 
-const throttleQueryRect = throttle(queryRect,1000)
+const throttleQueryRect = throttle(queryRect,1000, { trailing: true })
 
 Page({
   data: {
@@ -16,8 +17,13 @@ Page({
     recommendSongs:[],
     // rankings:[],//第一种方法
     rankings:{3779629:{},2884035:{},19723756:{}},// 第二种方法
+
+    currentSong:{}
   },
   onLoad: function (options) {
+    // 测试   给首页添加播放数据
+    playerStore.dispatch('playMusicWithSongIdAction',{ id:1842025914 })
+
     // 获取页面数据
     this.getPageData()
 
@@ -25,22 +31,24 @@ Page({
     rankingStore.dispatch('getRankingDataAction')
 
     // 从store中获取共享的数据
-    rankingStore.onState("hotRanking",(res) => {
-      // 热歌榜数据
-      // console.log('home-music:',res)
-      if(!res.tracks) return
-      const recommendSongs = res.tracks.slice(0,6)
-      // console.log(recommendSongs)
-      this.setData({recommendSongs})
-    })
-    // 第一种方法
-    // rankingStore.onState('newRanking',this.getNewRankingHandler)
-    // rankingStore.onState('originRanking',this.getNewRankingHandler)
-    // rankingStore.onState('upRanking',this.getNewRankingHandler)
-    // 第二种方法
-    rankingStore.onState('newRanking',this.getRankingHandler(3779629))
-    rankingStore.onState('originRanking',this.getRankingHandler(2884035))
-    rankingStore.onState('upRanking',this.getRankingHandler(19723756))
+    this.setupPlayerStoreListener()
+    // 没封装前
+    // rankingStore.onState("hotRanking",(res) => {
+    //   // 热歌榜数据
+    //   // console.log('home-music:',res)
+    //   if(!res.tracks) return
+    //   const recommendSongs = res.tracks.slice(0,6)
+    //   // console.log(recommendSongs)
+    //   this.setData({recommendSongs})
+    // })
+    // // 第一种方法
+    // // rankingStore.onState('newRanking',this.getNewRankingHandler)
+    // // rankingStore.onState('originRanking',this.getNewRankingHandler)
+    // // rankingStore.onState('upRanking',this.getNewRankingHandler)
+    // // 第二种方法
+    // rankingStore.onState('newRanking',this.getRankingHandler(3779629))
+    // rankingStore.onState('originRanking',this.getRankingHandler(2884035))
+    // rankingStore.onState('upRanking',this.getRankingHandler(19723756))
   },
   // 网络请求
   getPageData(){
@@ -98,8 +106,31 @@ Page({
       url: `/pages/detail-songs/detail-songs?ranking=${rankingName}&type=rank`,
     })
   },
+  handleSongItemClick:function(event){
+    const index = event.currentTarget.dataset.index
+    // console.log(index,this.data.recommendSongs)
+    playerStore.setState('playListSongs', this.data.recommendSongs)
+    playerStore.setState('playListIndex', index)
+  },
   onUnload: function () {
     // rankingStore.offState('newRanking',this.getNewRankingHandler)
+  },
+  setupPlayerStoreListener:function(){
+    // 1.排行榜监听
+    rankingStore.onState("hotRanking",(res) => {
+      // 热歌榜数据
+      if(!res.tracks) return
+      const recommendSongs = res.tracks.slice(0,6)
+      this.setData({recommendSongs})
+    })
+    rankingStore.onState('newRanking',this.getRankingHandler(3779629))
+    rankingStore.onState('originRanking',this.getRankingHandler(2884035))
+    rankingStore.onState('upRanking',this.getRankingHandler(19723756))
+
+    // 2.播放器监听
+    playerStore.onState('currentSong',(currentSong) => {
+      if(currentSong) this.setData({ currentSong })
+    })
   },
   // 第一种方法
   // getNewRankingHandler:function(res){
