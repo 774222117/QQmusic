@@ -139,7 +139,7 @@ Page({
     const currentTime = this.data.durationTime * value / 100
     this.setData({ currentTime })
     // 3.设置context播放currentTime位置的音乐
-    audioContext.pause()
+    // audioContext.pause()
     audioContext.seek(currentTime / 1000)
     // 4.记录最新的sliderValue
     this.setData({ sliderValue:value,isSliderChanging:false })
@@ -161,16 +161,15 @@ Page({
   },
   // 从playerStore中获取数据
   // ====================  数据监听  ====================
+  handleCurrentMusicListener:function({currentSong,durationTime,lyricInfos}){
+    if(currentSong) this.setData({ currentSong })
+    if(durationTime) this.setData({ durationTime })
+    if(lyricInfos) this.setData({ lyricInfos })
+  },
+
   setupPlayerStoreListener(){
-    playerStore.onStates(['currentSong','durationTime','lyricInfos'],({
-      currentSong,
-      durationTime,
-      lyricInfos
-    }) => {
-      if(currentSong) this.setData({ currentSong })
-      if(durationTime) this.setData({ durationTime })
-      if(lyricInfos) this.setData({ lyricInfos })
-    })
+    // 1.监听currentSong/durationTime/lyricInfos
+    playerStore.onStates(['currentSong','durationTime','lyricInfos'],this.handleCurrentMusicListener)
 
     // 2.监听currentTime/currentLyricIndex/currentLyricText
     playerStore.onStates(['currentTime','currentLyricIndex','currentLyricText'],({
@@ -220,6 +219,6 @@ Page({
     playerStore.dispatch('changeNewMusicAction')
   },
   onUnload() {
-
+    playerStore.offStates(['currentSong','durationTime','lyricInfos'],this.handleCurrentMusicListener)
   },
 })

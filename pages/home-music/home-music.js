@@ -18,11 +18,13 @@ Page({
     // rankings:[],//第一种方法
     rankings:{3779629:{},2884035:{},19723756:{}},// 第二种方法
 
-    currentSong:{}
+    currentSong:{},
+    isPlaying:false,
+    playAnimState:'paused'
   },
   onLoad: function (options) {
     // 测试   给首页添加播放数据
-    playerStore.dispatch('playMusicWithSongIdAction',{ id:1842025914 })
+    // playerStore.dispatch('playMusicWithSongIdAction',{ id:1842025914 })
 
     // 获取页面数据
     this.getPageData()
@@ -94,6 +96,12 @@ Page({
     // console.log('监听到推荐歌曲中的更多的点击')
     this.navigateToDetailSongsPage('hotRanking')
   },
+  // 点击首页bar跳转详情页
+  handlePlayBarClick:function(event){
+    wx.navigateTo({
+      url: '/pages/music-player/music-player?id=' + this.data.currentSong.id,
+    })
+  },
   handleRankingClick(event){
     // console.log(event.currentTarget.dataset.idx)
     const idx = event.currentTarget.dataset.idx
@@ -112,6 +120,10 @@ Page({
     playerStore.setState('playListSongs', this.data.recommendSongs)
     playerStore.setState('playListIndex', index)
   },
+  handlePlayBtnClick:function(){
+    playerStore.dispatch('changeMusicPlayStatusAction',!this.data.isPlaying)
+  },
+  // 卸载页面
   onUnload: function () {
     // rankingStore.offState('newRanking',this.getNewRankingHandler)
   },
@@ -128,8 +140,9 @@ Page({
     rankingStore.onState('upRanking',this.getRankingHandler(19723756))
 
     // 2.播放器监听
-    playerStore.onState('currentSong',(currentSong) => {
+    playerStore.onStates(['currentSong','isPlaying'],({currentSong,isPlaying}) => {
       if(currentSong) this.setData({ currentSong })
+      if(isPlaying !== undefined) this.setData({ isPlaying , playAnimState:isPlaying ? 'running' : 'paused'}) 
     })
   },
   // 第一种方法

@@ -18,16 +18,21 @@ page {
 }
 
 /* 播放工具栏 */
+.play-bar-placeholder {
+  height: 44px;
+}
+
 .play-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: fixed;
   left: 0;
+  padding: 0 8px;
   right: 0;
   bottom: 0;
   height: 44px;
-  background-color: #FFE8AC;
+  background-color: rgb(255,232,172);
   box-shadow: 0 -1px 5px rgba(0,0,0,0.2);
 }
 
@@ -40,6 +45,8 @@ page {
   width: 44px;
   height: 44px;
   border-radius: 50%;
+  position: relative;
+  top: -8px;
 }
 
 .play-bar .left .name {
@@ -56,4 +63,18 @@ page {
   width: 25px;
   height: 25px;
   margin-right: 10rpx;
+}
+
+/* album动画 */
+@keyframes albumRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.album-anim {
+  animation: albumRotate 16s linear infinite;
 }
